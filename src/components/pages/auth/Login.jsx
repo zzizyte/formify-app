@@ -11,7 +11,7 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`${API_URL}/api/users/login`, {
+      const response = await fetch(`${API_URL}api/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,7 +29,7 @@ function Login() {
       }
     } catch (err) {
       console.error("login failed", err);
-      alert("An error occurred. Please ttry again.");
+      alert("An error occurred. Please try again.");
     }
   };
   return (
