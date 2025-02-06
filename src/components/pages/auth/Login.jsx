@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import "./login.css";
-import dotenv from "dotenv";
 
-dotenv.config();
+const API_URL = import.meta.env.APP_API_URL;
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -12,7 +11,7 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`${APP_API_URL}/api/users/login`, {
+      const response = await fetch(`${API_URL}/api/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
