@@ -1,15 +1,37 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import './login.css';
+import "./login.css";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Login attmpted with:", { email, password });
-    
+    try {
+      const response = await fetch(`${APP_API_URL}/api/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("login successful", data);
+        localStorage.setItem("token", data.token);
+        window.location.href = "/";
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      console.error("login failed", err);
+      alert("An error occurred. Please ttry again.");
+    }
   };
   return (
     <Container>
