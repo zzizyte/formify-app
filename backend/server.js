@@ -1,38 +1,42 @@
 import dotenv from "dotenv";
 import express from "express";
-import cors from "cors"; //access for front end
-import sequelize from "./config/database.js";
-import User from "./models/user.js";
+import cors from "cors";
+import { sequelize } from "./models/index.js";
 import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 
 const app = express();
-app.use((req, res, next) => {
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Origin", req.headers.origin);
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.header("Access-Control-Allow-Credentials", "true");
-    return res.sendStatus(204); // ✅ Respond to preflight requests
-  }
-  next();
-});
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "https://formify-app-seven.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
 app.use("/api/users", authRoutes);
 
-const PORT = process.env.PORT || 3000;
-
 sequelize
   .sync({ alter: true })
   .then(() => {
-    console.log("succesful sync with supabase");
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    console.log("Successful sync with Supabase");
+
+    if (process.env.NODE_ENV !== "production") {
+      const PORT = process.env.PORT || 3000;
+      app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    }
   })
   .catch((err) => {
-    console.error(err, "unable to connect");
+    console.error("Unable to connect:", err);
   });
 
 export default app;
