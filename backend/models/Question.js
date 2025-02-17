@@ -16,10 +16,6 @@ const Question = sequelize.define("Question", {
     },
     onDelete: "CASCADE",
   },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   description: {
     type: DataTypes.TEXT,
   },

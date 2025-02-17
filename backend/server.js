@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { sequelize } from "./models/index.js";
 import authRoutes from "./routes/authRoutes.js";
+import templateRoutes from "./routes/templateRoutes.js"
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use(
 app.use(express.json());
 
 app.use("/api/users", authRoutes);
+app.use("/api/templates", templateRoutes);
 
 sequelize
   .sync({ alter: true })

@@ -1,5 +1,6 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, UUID } from "sequelize";
 import sequelize from "../config/database.js";
+import { v4 as uuidv4 } from "uuid";
 
 const User = sequelize.define(
   "User",
@@ -20,6 +21,12 @@ const User = sequelize.define(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      defaultValue: () => `user-${uuidv4().slice(0, 14)}`,
     },
     role: {
       type: DataTypes.ENUM("admin", "user"),
